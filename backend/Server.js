@@ -1,8 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const path = require('path');
 const { Server } = require('socket.io');
 const cors = require('cors');
+
 const chatLink = require('./routes/chatLink');
 const Socketchat = require('./sockets/Socketchat');
 const pool = require('./config/db');
@@ -15,33 +17,23 @@ const io = new Server(server, {
 });
 
 app.use(cors());
+app.use(express.json());
 
-// Health check endpoint
-app.get('/health', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT NOW()');
-    res.json({ status: 'ok', time: result.rows[0] });
-  } catch (err) {
-    res.status(500).json({ status: 'error', error: err.message });
-  }
-});
+const reactDist = path.join(__dirname, '../frontend/OpenChat/dist');
+const chatHtml = path.join(__dirname, '../frontend/index.html');
+app.use('/api', chatLink);
 
-const distPath = path.join(__dirname, '../frontend/OpenChat/dist');
-
-app.use(express.static(distPath));
-
+app.get('/chat/:chatId',(req,res)=>{
+    res.sendFile(chatHtml);
+})
+app.use(express.static(reactDist));
 app.get('/', (req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
+  res.sendFile(path.join(reactDist, 'index.html'));
 });
-app.get('/chat/:chatId', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
-});
-app.use('/', chatLink);
-
 Socketchat(io);
 
 const PORT = process.env.PORT || 5008;
 
 server.listen(PORT, () => {
-  console.log(`server running on ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

@@ -1,8 +1,6 @@
 const generateChatId = require('../utils/generateChatId');
 const pool = require('../config/db');
 const path = require('path');
-const { fetchMessages } = require('../sockets/FetchMessage');
-const Socketchat = require('../sockets/Socketchat');
 
 exports.createChat = async (req, res) => {
     try {
@@ -13,7 +11,7 @@ exports.createChat = async (req, res) => {
             [chatId]
         );
 
-        const baseUrl = `http://${req.get('host')}`;
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
 
         res.json({
             chatId,
@@ -21,14 +19,11 @@ exports.createChat = async (req, res) => {
         });
 
     } catch (err) {
-        console.error('createChat error:', err.message, err.code);
-        res.status(500).json({ 
-            error: err.message,
-            code: err.code
-        });
+        console.error(err);
+        res.status(500).json({ error: "Error creating chat" });
     }
-    
 };
+
 exports.loadChatPage = (req, res) => {
     res.sendFile(path.join(__dirname, '../../frontend/index.html'));
 };

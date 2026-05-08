@@ -885,13 +885,16 @@ export default function OpenChat() {
       setLogs(p => [...p, line]);
     }
     try {
-      const res  = await fetch('/create-chatLink');
-      if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-      const data = await res.json();
+      const res = await fetch('/api/create-chatLink');
+if (!res.ok) {
+  throw new Error(`Server error: ${res.status}`);
+}
+
+const data = await res.json();
       if (!data.link) throw new Error('no link in response');
       const chatId = data.chatId || data.link.split('/').pop();
       setLogs(p => [...p, { t: 'ok', v: '[✓] link provisioned — connection ready' }]);
-      setLink(`/chat/${chatId}`);
+      setLink(`${window.location.origin}/chat/${chatId}`);
     } catch (err) {
       console.error('Chat creation error:', err);
       setLogs(p => [...p, { t: 'err', v: `[✗] ${err.message || 'host unreachable'}` }]);
