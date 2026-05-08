@@ -5,6 +5,7 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 const chatLink = require('./routes/chatLink');
 const Socketchat = require('./sockets/Socketchat');
+const pool = require('./config/db');
 
 const app = express();
 const server = http.createServer(app);
@@ -14,6 +15,16 @@ const io = new Server(server, {
 });
 
 app.use(cors());
+
+// Health check endpoint
+app.get('/health', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json({ status: 'ok', time: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ status: 'error', error: err.message });
+  }
+});
 
 const distPath = path.join(__dirname, '../frontend/OpenChat/dist');
 
