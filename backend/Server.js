@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 app.get('/chat/:chatId', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/chat.html'));
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 app.use('/', chatLink);
 
