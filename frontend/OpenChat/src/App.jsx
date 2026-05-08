@@ -4,6 +4,7 @@
  * Drop-in: import OpenChat from './OpenChat'
  */
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { io } from 'socket.io-client';
 
 /* ════════════════════════════════════════════
    DECRYPTED TEXT  (React Bits — no motion dep)
@@ -870,6 +871,11 @@ export default function OpenChat() {
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    const socket = io();
+    return () => socket.disconnect();
   }, []);
 
   const generate = async () => {
