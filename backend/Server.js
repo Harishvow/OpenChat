@@ -18,6 +18,22 @@ const io = new Server(server, {
 
 app.use(cors());
 app.use(express.json());
+(async () => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id SERIAL PRIMARY KEY,
+        chat_id VARCHAR(255),
+        sender VARCHAR(255),
+        message TEXT,
+        created_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+    console.log('✓ messages table initialized');
+  } catch (err) {
+    console.error('Database init error:', err.message);
+  }
+})();
 
 const reactDist = path.join(__dirname, '../frontend/OpenChat/dist');
 const chatHtml = path.join(__dirname, '../frontend/index.html');

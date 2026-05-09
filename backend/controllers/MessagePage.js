@@ -2,6 +2,7 @@ const pool = require('../config/db');
 
 exports.getMessages = async (req, res) => {
     const chatId = req.params.chatId;
+    console.log('🔥 getMessages called for chatId:', chatId);
 
     try {
         const result = await pool.query(
@@ -9,10 +10,11 @@ exports.getMessages = async (req, res) => {
             [chatId]
         );
 
+        console.log(`✓ Found ${result.rows.length} messages for chat ${chatId}`);
         res.json(result.rows);
 
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Error fetching messages");
+        console.error('❌ getMessages error:', err.message);
+        res.status(500).json({ error: err.message });
     }
 };

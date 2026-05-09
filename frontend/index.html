@@ -9,25 +9,25 @@
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
-  --bg:        #000;
-  --bg1:       #080808;
-  --bg2:       #0e0e0e;
-  --fg:        #e2e2e2;
-  --fg-dim:    #2e2e2e;
-  --fg-mid:    #555;
-  --blue:      #5294e2;
-  --blue-d:    #1a2e50;
-  --blue-bg:   #060c18;
-  --cyan:      #5bc8af;
-  --cyan-d:    #0a2018;
-  --cyan-bd:   #0d2e22;
+  --bg:        #0a0a0f;
+  --bg1:       #0e0e14;
+  --bg2:       #14141c;
+  --fg:        #e8e8f0;
+  --fg-dim:    #6b6b80;
+  --fg-mid:    #888;
+  --blue:      #6aafff;
+  --blue-d:    #1e3a6e;
+  --blue-bg:   #0d1a35;
+  --cyan:      #5eecd5;
+  --cyan-d:    #0e2a22;
+  --cyan-bd:   #18483a;
   --mono:      'JetBrains Mono', monospace;
 
   /* sizing tokens — desktop */
   --topbar-h:   44px;
   --bar-h:      28px;
   --input-h:    auto;
-  --bubble-max: 60%;
+  --bubble-max: 65%;
   --pad-x:      20px;
   --pad-msg:    16px;
   --fs-base:    13px;
@@ -55,6 +55,15 @@ html {
   background: var(--bg);
 }
 
+@keyframes msgSlideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes msgSlideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 body {
   font-family: var(--mono);
   font-size: var(--fs-base);
@@ -76,7 +85,7 @@ body {
   height: var(--topbar-h);
   min-height: var(--topbar-h);
   background: var(--bg);
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid #1a1a24;
   display: flex;
   align-items: center;
   padding: 0 var(--pad-x);
@@ -85,7 +94,7 @@ body {
   padding-top: env(safe-area-inset-top);
 }
 
-.tb-logo  { color: var(--blue); font-weight: 500; font-size: var(--fs-base); letter-spacing: 0.3px; }
+.tb-logo  { color: var(--blue); font-weight: 500; font-size: var(--fs-base); letter-spacing: 0.3px; text-shadow: 0 0 12px rgba(106,175,255,0.3); }
 .tb-sep   { color: var(--fg-dim); }
 .tb-room  {
   color: var(--fg-mid);
@@ -105,7 +114,7 @@ body {
 }
 .tb-user   { color: var(--blue); font-weight: 500; }
 .tb-status { color: var(--fg-dim); }
-.tb-status.live { color: #2a5a2a; }
+.tb-status.live { color: #3a8a4a; }
 .tb-clock  { color: var(--fg-dim); font-variant-numeric: tabular-nums; }
 
 /* hide some topbar items on mobile */
@@ -126,7 +135,7 @@ body {
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 6px;
   padding: var(--pad-msg) var(--pad-x);
   background: var(--bg);
 }
@@ -157,80 +166,88 @@ body {
 .sys-line {
   align-self: center;
   font-size: var(--fs-sys);
-  color: var(--fg-dim);
-  padding: 2px 0;
-  letter-spacing: 0.2px;
+  color: #7a7a90;
+  padding: 6px 16px;
+  margin: 8px 0;
+  letter-spacing: 0.5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  background: rgba(255,255,255,0.03);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.05);
 }
-.sys-line .b { color: #1e1e1e; }
+.sys-line .b { color: #4a4a5a; }
 
 /* message row */
 .msg-row {
   display: flex;
   flex-direction: column;
   max-width: var(--bubble-max);
-  gap: 3px;
+  gap: 4px;
+  margin-bottom: 4px;
 }
-.msg-row.me    { align-self: flex-end;   align-items: flex-end;   }
-.msg-row.other { align-self: flex-start; align-items: flex-start; }
+.msg-row.me    { align-self: flex-end;   align-items: flex-end;   animation: msgSlideInRight 0.25s ease-out; }
+.msg-row.other { align-self: flex-start; align-items: flex-start; animation: msgSlideInLeft 0.25s ease-out; }
 
 /* meta: [ts] username */
 .msg-meta {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 0 4px;
+  gap: 6px;
+  padding: 0 6px;
   font-size: var(--fs-meta);
   color: var(--fg-dim);
 }
 .msg-row.me .msg-meta { flex-direction: row-reverse; }
 
-.meta-ts   { color: #1c1c1c; font-variant-numeric: tabular-nums; }
-.meta-user { font-weight: 500; }
-.meta-user.me    { color: var(--blue); }
-.meta-user.other { color: var(--cyan); }
+.meta-ts   { color: #5a5a6a; font-variant-numeric: tabular-nums; }
+.meta-user { font-weight: 500; letter-spacing: 0.3px; }
+.meta-user.me    { color: var(--blue); text-shadow: 0 0 8px rgba(106,175,255,0.4); }
+.meta-user.other { color: var(--cyan); text-shadow: 0 0 8px rgba(94,236,213,0.4); }
 
 /* bubble */
 .bubble {
-  padding: 8px 12px;
+  padding: 10px 14px;
   font-size: var(--fs-base);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.6;
   word-break: break-word;
   border: 1px solid;
   position: relative;
+  color: #ffffff;
 }
 
 .msg-row.me .bubble {
-  background: var(--blue-bg);
-  border-color: var(--blue-d);
-  color: #b0c8ee;
-  border-radius: 6px 0px 6px 6px;
+  background: linear-gradient(135deg, #1a3a6e 0%, #0d2550 100%);
+  border-color: #2a4a8e;
+  color: #ffffff;
+  border-radius: 14px 4px 14px 14px;
+  box-shadow: 0 2px 12px rgba(106,175,255,0.08);
 }
 .msg-row.other .bubble {
-  background: var(--cyan-d);
-  border-color: var(--cyan-bd);
-  color: #98d0be;
-  border-radius: 0px 6px 6px 6px;
+  background: linear-gradient(135deg, #143832 0%, #0c2820 100%);
+  border-color: #1e5848;
+  color: #ffffff;
+  border-radius: 4px 14px 14px 14px;
+  box-shadow: 0 2px 12px rgba(94,236,213,0.08);
 }
 
 /* corner tail */
 .msg-row.me .bubble::after {
   content: '';
   position: absolute;
-  top: 0; right: -5px;
-  border-top: 5px solid var(--blue-d);
-  border-left: 5px solid transparent;
+  top: 0; right: -6px;
+  border-top: 6px solid #2a4a8e;
+  border-left: 6px solid transparent;
 }
 .msg-row.other .bubble::after {
   content: '';
   position: absolute;
-  top: 0; left: -5px;
-  border-top: 5px solid var(--cyan-bd);
-  border-right: 5px solid transparent;
+  top: 0; left: -6px;
+  border-top: 6px solid #1e5848;
+  border-right: 6px solid transparent;
 }
 
 /* ────────────────────────────
@@ -239,7 +256,7 @@ body {
 .input-wrap {
   flex-shrink: 0;
   background: var(--bg);
-  border-top: 1px solid #111;
+  border-top: 1px solid #1a1a24;
   padding-bottom: env(safe-area-inset-bottom);
 }
 
@@ -253,9 +270,9 @@ body {
   line-height: 1;
 }
 .p-user  { color: var(--blue); font-weight: 500; }
-.p-at    { color: #1a1a1a; }
+.p-at    { color: #3a3a4a; }
 .p-host  { color: var(--cyan); }
-.p-path  { color: #1a1a1a; }
+.p-path  { color: #3a3a4a; }
 .p-arrow { color: var(--blue); margin: 0 6px 0 1px; }
 
 .input-row {
@@ -270,7 +287,7 @@ body {
   min-width: 0;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #141414;
+  border-bottom: 1px solid #2a2a3a;
   outline: none;
   font-family: var(--mono);
   font-weight: 300;
@@ -281,8 +298,8 @@ body {
   padding: 6px 0;
   line-height: 1.4;
 }
-#msg::placeholder { color: #1e1e1e; }
-#msg:focus        { border-bottom-color: #1a2e50; }
+#msg::placeholder { color: #3a3a4a; }
+#msg:focus        { border-bottom-color: #2a4a80; }
 
 .send-btn {
   flex-shrink: 0;
@@ -324,8 +341,8 @@ body {
   white-space: nowrap;
   overflow: hidden;
 }
-.bottombar .val  { color: #282828; }
-.bottombar .bval { color: #1a2e50; }
+.bottombar .val  { color: #5a5a6a; }
+.bottombar .bval { color: #4080c0; }
 .bottombar-right { margin-left: auto; }
 
 @media (max-width: 600px) {
@@ -341,7 +358,7 @@ body {
   body {
     align-items: center;
     justify-content: center;
-    background: #050505;
+    background: #060610;
   }
   body::before {
     content: '';
@@ -479,43 +496,95 @@ document.getElementById('pUser').textContent   = sender;
 let msgCount = 0;
 
 /* ── socket ── */
-const socket = io();
-socket.emit('joinRoom', chatId);
+const socket = io(window.location.origin, {
+  transports: ['websocket', 'polling']
+});
+
+socket.on('connect', () => {
+  console.log('✅ Socket connected');
+
+  socket.emit('joinRoom', chatId);
+
+  setStatus('connected', true);
+});
+
+socket.on('connect_error', (err) => {
+  console.error('❌ Socket error:', err);
+  setStatus('offline', false);
+});
+
+/* LOAD OLD MESSAGES */
+console.log('🔥 Fetching messages for chatId:', chatId);
 
 fetch(`/api/messages/${chatId}`)
-  .then(r => r.json())
+  .then(r => {
+    console.log('Response status:', r.status);
+    if (!r.ok) {
+      throw new Error(`HTTP ${r.status}`);
+    }
+    return r.json();
+  })
   .then(data => {
 
-    console.log("Loaded messages:", data);
+    console.log('✅ Fetched messages:', data);
+    console.log('Data type:', typeof data);
+    console.log('Is array:', Array.isArray(data));
+    console.log('Length:', data ? data.length : 'null');
 
-    if(data.length === 0){
+    if (!Array.isArray(data)) {
+      console.error('❌ Data is not an array:', data);
+      sysLine('error: invalid data format');
+      setStatus('offline', false);
+      return;
+    }
+
+    hideEmpty();
+
+    if (data.length === 0) {
       sysLine('session started');
-      setStatus('connected', true);
+      console.log('No previous messages');
     } else {
-      hideEmpty();
-      sysLine('session resumed');
 
-      data.forEach(m => {
-        addMessage(m.sender, m.message);
+      data.forEach((m, idx) => {
+
+        console.log(`Message ${idx}:`, m);
+
+        addMessage(
+          m.sender || 'unknown',
+          m.message || '(empty)',
+          m.created_at
+        );
       });
 
-      sysLine(data.length + ' message(s) loaded');
-      setStatus('connected', true);
+      sysLine(`${data.length} message(s) loaded`);
     }
+
+    setStatus('connected', true);
 
   })
   .catch(err => {
-    console.error(err);
-    sysLine('server unreachable — offline mode');
+    console.error('❌ Fetch error:', err);
+
+    sysLine(`error: ${err.message}`);
+
     setStatus('offline', false);
   });
 
-socket.on('receiveMessage', data => {
-  hideEmpty();
-  setStatus('connected', true);
-  addMessage(data.sender, data.message);
-});
+/* RECEIVE LIVE MESSAGE */
+socket.on('receiveMessage', (data) => {
 
+  console.log('Live message:', data);
+
+  hideEmpty();
+
+  addMessage(
+    data.sender || 'unknown',
+    data.message || '',
+    new Date()
+  );
+
+  setStatus('connected', true);
+});
 /* ── send ── */
 function sendMessage(){
   const inp = document.getElementById('msg');
@@ -542,16 +611,22 @@ function ts(){
   return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
 }
 
-function addMessage(user, text){
+function addMessage(user, text, createdAt){
   hideEmpty();
   const isMe = user === sender;
   const box  = document.getElementById('messages');
+
+  let time = ts();
+  if(createdAt){
+    const d = new Date(createdAt);
+    time = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+  }
 
   const row = document.createElement('div');
   row.className = 'msg-row ' + (isMe ? 'me' : 'other');
   row.innerHTML =
     `<div class="msg-meta">
-       <span class="meta-ts">[${ts()}]</span>
+       <span class="meta-ts">[${time}]</span>
        <span class="meta-user ${isMe ? 'me' : 'other'}">${esc(user)}</span>
      </div>
      <div class="bubble">${esc(text)}</div>`;
