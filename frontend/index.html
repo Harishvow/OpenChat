@@ -485,18 +485,27 @@ socket.emit('joinRoom', chatId);
 fetch(`/api/messages/${chatId}`)
   .then(r => r.json())
   .then(data => {
+
+    console.log("Loaded messages:", data);
+
     if(data.length === 0){
       sysLine('session started');
       setStatus('connected', true);
     } else {
       hideEmpty();
       sysLine('session resumed');
-      data.forEach(m => addMessage(m.sender, m.message));
+
+      data.forEach(m => {
+        addMessage(m.sender, m.message);
+      });
+
       sysLine(data.length + ' message(s) loaded');
       setStatus('connected', true);
     }
+
   })
-  .catch(() => {
+  .catch(err => {
+    console.error(err);
     sysLine('server unreachable — offline mode');
     setStatus('offline', false);
   });
