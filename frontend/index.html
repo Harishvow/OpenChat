@@ -482,7 +482,7 @@ let msgCount = 0;
 const socket = io();
 socket.emit('joinRoom', chatId);
 
-fetch(`/messages/${chatId}`)
+fetch(`/api/messages/${chatId}`)
   .then(r => r.json())
   .then(data => {
     if(data.length === 0){

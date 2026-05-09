@@ -7,6 +7,6 @@ const { getMessages } = require('../controllers/MessagePage');
 
 router.get('/create-chatLink', createChat);
 router.get('/chat/:chatId', checkChat, loadChatPage);
-router.get('/messages/:chatId', getMessages);
+router.get('/api/messages/:chatId', getMessages);
 
 module.exports = router;
