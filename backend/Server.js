@@ -37,6 +37,7 @@ app.use(express.json());
 
 const reactDist = path.join(__dirname, '../frontend/OpenChat/dist');
 const chatHtml = path.join(__dirname, '../frontend/index.html');
+
 app.use('/api', chatLink);
 
 app.get('/chat/:chatId',(req,res)=>{
@@ -46,6 +47,9 @@ app.use(express.static(reactDist));
 app.get('/', (req, res) => {
   res.sendFile(path.join(reactDist, 'index.html'));
 });
+app.get('api/health',(req,res)=>{
+  res.json({status:"ok",timestamp: new Date()})
+})
 Socketchat(io);
 
 const PORT = process.env.PORT || 5008;
