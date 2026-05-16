@@ -47,7 +47,7 @@ app.use(express.static(reactDist));
 app.get('/', (req, res) => {
   res.sendFile(path.join(reactDist, 'index.html'));
 });
-app.get('api/health',(req,res)=>{
+app.get('/api/health',(req,res)=>{
   res.json({status:"ok",timestamp: new Date()})
 })
 Socketchat(io);
